@@ -49,3 +49,22 @@ body.dark #moon {
 body:not(.dark) #sun {
     display: none;
 }
+
+/* Force all experience titles/designations to be perfectly uniform across all tabs */
+.experience-section h3,
+.experience-section h4,
+.experience .tab-content h3,
+.experience .tab-content h4,
+.job-details h3,
+.job-details h4,
+div[id^="job-"] h3,
+div[id^="job-"] h4,
+div[class*="tab-pane"] h3,
+div[class*="tab-pane"] h4 {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    opacity: 1 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+}
