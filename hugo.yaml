@@ -1,0 +1,371 @@
+baseURL: "https://hugo-profile.netlify.app"
+languageCode: "en-us"
+title: "Hugo Profile"
+theme:
+
+# Multilingual configuration
+defaultContentLanguage: "en"
+defaultContentLanguageInSubdir: false
+
+languages:
+  en:
+    languageName: "English"
+    weight: 1
+    contentDir: "content"
+    menu:
+      main:
+        - identifier: blog
+          name: Blog
+          title: Blog posts
+          url: /blogs
+          weight: 1
+        - identifier: gallery
+          name: Gallery
+          title: Image gallery
+          url: /gallery
+          weight: 2
+outputs:
+  home:
+    - "HTML"
+    - "RSS"
+    - "JSON"
+  page:
+    - "HTML"
+    - "RSS"
+
+enableRobotsTXT: true
+
+#services:
+  #googleAnalytics:
+    #id: G-MEASUREMENT_ID
+  #disqus:
+    #shortname: your-disqus-shortname
+
+pagination:
+  pagerSize: 3
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+
+Menus:
+  main:
+    - identifier: gallery
+      name: Gallery
+      title: Gallery
+      url: /gallery
+      weight: 2
+    #Dropdown menu
+    # - identifier: dropdown
+    #   title: Example dropdown menu
+    #   name: Dropdown
+    #   weight: 3
+    # - identifier: dropdown1
+    #   title: example dropdown 1
+    #   name: example 1
+    #   url: /#
+    #   parent: dropdown
+    #   weight: 1
+    # - identifier: dropdown2
+    #   title: example dropdown 2
+    #   name: example 2
+    #   url: /#
+    #   parent: dropdown
+    #   weight: 2
+
+params:
+  title: "Hugo Profile"
+  description: Text about my cool site
+  # staticPath: ""  # The path to serve the static files from
+  favicon: "/fav.png"
+
+  # Whether to serve bootstrap css and js files from CDN or not. Can be set to true, "css" or "js" to choose between
+  # serving both, only the css, or only the js files through the CDN. Any other value will make so that CDN is not used.
+  # Note the lack of "" in true, it should be of boolean type.
+  useBootstrapCDN: false
+
+  # If you want to load dynamically responsive images from Cloudinary
+  # This requires your images to be uploaded + hosted on Cloudinary
+  # Uncomment and change YOUR_CLOUD_NAME to the Cloud Name in your Cloudinary console
+  # cloudinary_cloud_name: "YOUR_CLOUD_NAME"
+
+  # Whether to add mathjax support on all pages. Alternatively, you can opt-in per page by adding `mathjax: true` in the frontmatter.
+  mathjax: false
+
+  # Whether the fade animations on the home page will be enabled
+  animate: true
+
+  theme:
+    # disableThemeToggle: true
+    # defaultTheme: "light" # dark
+
+  font:
+    fontSize: 1rem # default: 1rem
+    fontWeight: 400 # default: 400
+    lineHeight: 1.5 # default: 1.5
+    textAlign: left # default: left
+
+  # color preference
+  # When using hex codes for colors, quotations must be used along with the # sign
+  # color:
+  #   textColor: "#343a40"
+  #   secondaryTextColor: "#6c757d"
+  #   textLinkColor: "#007bff"
+  #   backgroundColor: "#eaedf0"
+  #   secondaryBackgroundColor: "#64ffda1a"
+  #   primaryColor: "#007bff"
+  #   secondaryColor: "#f8f9fa"
+
+  #   darkmode:
+  #     textColor: "#e4e6eb"
+  #     secondaryTextColor: "#b0b3b8"
+  #     textLinkColor: "#ffffff"
+  #     backgroundColor: "#18191a"
+  #     secondaryBackgroundColor: "#212529"
+  #     primaryColor: "#ffffff"
+  #     secondaryColor: "#212529"
+
+  # If you want to customize the menu, you can change it here
+  navbar:
+    align: ms-auto # Left: ms-auto | center: mx-auto | right: me-auto | Default: ms-auto
+    # brandLogo: "/logo.png" # Logo for the brand | default is the favicon variable
+    # showBrandLogo: false # Show brand logo in nav bar | default is true
+    brandName: "Hugo Profile" # Brand name for the brand | default is the title variable
+    disableSearch: false
+    # searchPlaceholder: "Search"
+    stickyNavBar:
+      enable : true
+      showOnScrollUp : true
+    enableSeparator: false
+    menus:
+      disableAbout: false
+      disableExperience: false
+      disableEducation: false
+      disableProjects: false
+      disableAchievements: false
+      disableContact: false
+
+  # Hero
+  hero:
+    enable: true
+    intro: "Hi, my name is"
+    title: "Atherva Patil."
+    subtitle: "Business Analytics & Finance"
+    image: "images/ap_linkedin1.png"
+    content: "Dual-degree candidate at the University of Cincinnati with progressive experience in FP&A, investment operations, and wealth management across global markets."
+    bottomImage:
+      enable: true
+    button:
+      enable: true
+      name: "Resume"
+      url: "/Atherva_Patil_Resume.pdf"
+      download: true
+      newPage: false
+    socialLinks:
+      fontAwesomeIcons:
+        - icon: fab fa-github
+          url: https://github.com/patila02
+        - icon: fab fa-linkedin
+          url: https://linkedin.com/in/athervapatil
+      customIcons: []
+
+  # About
+  about:
+    enable: true
+    title: "About Me"
+    image: "images/AP_Image.jpeg"
+    content: |-
+      I am a Business Analytics and Finance dual-degree candidate at the University of Cincinnati (expected May 2027) with a passion for delivering data-driven insights. 
+
+      With over three years of progressive experience, I specialize in optimizing portfolio performance, reducing cost exposure, and accelerating strategic investment decisions. My technical toolkit includes Python, SQL, Excel, Power BI, and Tableau, which I leverage for financial modeling, DCF valuation, and KPI dashboard development.
+    skills:
+      enable: true
+      title: "Here are a few tools and technologies I use:"
+      items:
+        - "Python & SQL (MySQL)"
+        - "Power BI & Tableau"
+        - "Advanced Excel (VBA, Pivot Tables)"
+        - "Financial Modeling & DCF Valuation"
+        - "FactSet & Bloomberg"
+
+  # Experience
+  experience:
+    enable: true
+    title: "Experience"
+    items:
+      - company: "Samara Capital"
+        jobs:
+          - title: "Fall Analyst - Operations Division"
+            name: "Fall Analyst - Operations Division"
+            role: "Fall Analyst - Operations Division"
+            designation: "Fall Analyst - Operations Division"
+            date: "Sep 2025 - Dec 2025"
+            content: |-
+              - Engineered dynamic KPI dashboards monitoring 15+ governance and compliance metrics, accelerating investment decision cycles by ~30% and increasing cross-team reporting efficiency.
+              - Maintained 100% audit accuracy across all investment activity records by executing rigorous regulatory compliance and internal audit protocols spanning the full investment operations lifecycle.
+              - Conducted comprehensive operational reviews of mid-market portfolio companies to identify efficiency gaps, directly supporting the firm's broader value-creation and buyout strategies.
+
+      - company: "Enrichwise Financial Services"
+        jobs:
+          - designation: "<span style='font-size: 0.9em; font-weight: 500;'>Wealth Management Intern</span>"
+            date: "May 2024 - Aug 2024"
+            content: |-
+              - Managed and optimized 50+ client portfolios totaling $8M+ AUM using FactSet analytics to identify market trends, rebalance allocations, and drive measurable performance growth.
+              - Designed customized asset diversification strategies that reduced client risk exposure, contributing to a 95%+ client retention rate across a book of high-net-worth accounts.
+              - Spearheaded comprehensive financial planning initiatives, integrating tax advisory and regulatory reporting to provide holistic investment strategies tailored to individual client goals.
+
+      - company: "Sapphire Foods India Limited"
+        jobs:
+          - designation: "<span style='font-size: 0.9em; font-weight: 500;'>FP&A Intern</span>"
+            date: "Jun 2023 - Aug 2023"
+            content: |-
+              - Built regional budget-vs-actual tracking dashboards in Excel, improving sales forecasting precision by 20% across 5+ operational zones and accelerating monthly close cycles by 1 week.
+              - Analyzed large-scale financial models and cost structures to surface $200K+ in annualized cost-saving opportunities, directly improving enterprise-wide financial efficiency.
+              - Evaluated unit-level economics and store profitability using Pacesetter benchmarking, isolating drivers of margin compression across multiple retail formats to advise strategic pricing adjustments.
+
+  # Education
+  education:
+    enable: true
+    title: "Education"
+    items:
+      - title: "Bachelor of Science in Business Analytics"
+        school:
+          name: "University of Cincinnati"
+          url: "https://www.business.uc.edu/"
+        date: "Aug 2022 - May 2027"
+        content: |-
+          Business Analytics is the scientific process of transforming data into insights, and ultimately into better decisions. 
+          
+          - Trained to apply descriptive, predictive, and prescriptive models to complex datasets.
+          - Focused on helping organizations better analyze data to make operational and strategic decisions.
+          - Coursework includes applied mathematics, modeling, data exploration, and visualization.
+
+      - title: "Bachelor of Business Administration in Finance"
+        school:
+          name: "University of Cincinnati"
+          url: "https://www.business.uc.edu/"
+        date: "Aug 2022 - May 2027"
+        content: |-
+          Finance is an analytical discipline focusing on critical decisions faced by individuals, businesses, and nonprofit organizations. 
+          
+          - Integrates economics, accounting, and quantitative analysis to build a strong foundation for decision-making.
+          - Curriculum includes financial accounting, risk management, capital budgeting, and investment analysis.
+          - Specialized focus in forecasting corporate financial decisions, evaluating security portfolios, and analyzing financial markets.
+
+  # Achievements
+  achievements:
+    enable: true
+    title: "Certifications & Achievements"
+    items:
+      - title: "Bloomberg Market Concepts (BMC)"
+        url: "#"
+        description: "Comprehensive certification covering economic indicators, currencies, fixed income, and equities to analyze financial markets and construct portfolios."
+
+      - title: "Google Business Intelligence Specialization"
+        url: "#"
+        description: "Advanced specialization covering data modeling, pipeline architecture, and the design of interactive dashboards for strategic decision-making."
+
+      - title: "Leveraging Generative AI in Finance & Accounting"
+        url: "#"
+        description: "Focused training on integrating artificial intelligence into financial reporting, modeling, and automating business operations."
+
+      - title: "Investment Risk Management"
+        url: "#"
+        description: "Certification covering core concepts in portfolio risk exposure, asset diversification, and evaluating market trends to optimize client portfolios."
+
+  # Projects
+  projects:
+    enable: true
+    title: "Projects & Academic Experience"
+    items:
+      - title: "CTO, Consulting Practicum (Finance 5093)"
+        date: "Jan 2026 - May 2026"
+        content: |-
+          Led a cross-functional team of 8 students delivering corporate consulting projects, achieving 100% on-time completion across 3+ simultaneous client initiatives. 
+          
+          - Architected technical project management workflows aligning student deliverables to corporate sponsor KPIs, reducing scope revision cycles by 25%.
+        badges:
+          - "Project Management"
+          - "KPI Tracking"
+          - "Cross-functional Leadership"
+
+      - title: "AI & Finance Research (Prompt Engineer)"
+        date: "Jan 2026 - May 2026"
+        content: |-
+          Developed AI-driven financial models that improved hiring forecast accuracy by 25% and reduced budget variance across 4 university departments.
+          
+          - Applied AI analytics to large-scale acquisition datasets, accelerating ROI-driven candidate offer decisions by ~40%.
+        badges:
+          - "AI Analytics"
+          - "Financial Modeling"
+          - "Python"
+
+      - title: "Financial Modeling & SQL Simulation Modules"
+        date: "Jul 2024 - Jan 2025"
+        content: |-
+          Designed simulation modules for manufacturing analysis and financial forecasting adopted across 3+ course sections at the University of Cincinnati. 
+          
+          - Mentored 150+ students in advanced Excel financial modeling and SQL querying, achieving a 90%+ satisfaction rating.
+        badges:
+          - "SQL"
+          - "Advanced Excel (VBA)"
+          - "Data Mentorship"      
+
+  #Contact
+  contact:
+    enable: true
+    # title: "Custom Name"
+    content: My inbox is always open. Whether you have a question or just want to say hi, I’ll get back to you as soon as possible!
+    btnName: E-Mail me
+    btnLink: mailto:athervapatil04@gmail.com
+    # formspree:
+    #   enable: true # `contact.email` value will be ignored
+    #   formId: abcdefgh # Take it from your form's endpoint, like 'https://formspree.io/f/abcdefgh'
+    #   emailCaption: "Enter your email address"
+    #   messageCaption: "Enter your message here"
+    #   messageRows: 5
+
+  footer:
+    recentPosts:
+      path: "blogs"
+      count: 3
+      title: Recent Posts
+      enable: true
+      disableFeaturedImage: false
+    socialNetworks:
+      github: https://github.com
+      linkedin: https://linkedin.com
+      twitter: https://twitter.com
+      instagram: https://instagram.com
+      facebook: https://facebook.com
+
+  # List pages like blogs and posts
+  listPages:
+    disableFeaturedImage: false
+
+  # Single pages like blog and post
+  singlePages:
+    socialShare: true
+    readTime:
+      enable: true
+      content: "min read"
+    scrollprogress:
+      enable: true
+    tags:
+      openInNewTab: true
+
+  # For translations
+  terms:
+    read: "Read"
+    toc: "Table Of Contents"
+    copyright: "All rights reserved"
+    emailText: "Check out this site"
+
+  datesFormat:
+    article: "Jan 2, 2006"
+    articleList: "Jan 2, 2006"
+    articleRecent: "Jan 2, 2006"
+
+  #customScripts: -| # You can add custom scripts which will be added before </body> tag
+  #  <script type="text/javascript"><!-- any script here --></script>

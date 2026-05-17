@@ -1,45 +1,33 @@
 {{ if .Site.Params.achievements.enable | default false }}
 {{- $achievements := .Site.Language.Params.achievements | default .Site.Params.achievements -}}
+
 <section id="achievements" class="py-5">
     <div class="container">
-        <h3 class="text-center">{{ $achievements.title | default .Site.Params.achievements.title | default (i18n "achievements") }}</h3>
-        <div class="px-0 px-md-5 px-lg-5">
-            <div class="row justify-content-center px-3 px-md-5 px-lg-5">
-                {{ range $achievements.items | default .Site.Params.achievements.items }}
-                {{ if .url }}
-                <div class="col-lg-4 col-md-6 my-3">
-                    <a class="card my-3 h-100 p-3" href="{{ .url }}" title="{{ .title }}" target="_blank">
-                        {{if .image }}
-                            <div class="card-head">
-                                <img class="card-img-top" src="{{ .image }}">
+        <h3 class="text-center mb-5" style="font-weight: 600; letter-spacing: 1px;">{{ $achievements.title | default (i18n "achievements") }}</h3>
+        <div class="row justify-content-center">
+            <div class="col-sm-12 col-md-10 col-lg-9">
+                <div class="experience-card p-4 p-md-5 border rounded shadow-sm">
+                    {{ range $index, $element := $achievements.items }}
+                        <div class="mb-4 {{ if ne (add $index 1) (len $achievements.items) }}job-header-divider{{ end }}">
+                            <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between mb-2">
+                                <div>
+                                    <h5 style="font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0;">
+                                        {{ if and .url (ne .url "#") }}
+                                            <a href="{{ .url }}" target="_blank" class="text-decoration-none" style="color: inherit;">
+                                                <i class="fas fa-award me-2 text-muted"></i>{{ .title }} <i class="fas fa-external-link-alt fa-xs ms-2 text-muted" style="opacity: 0.5;"></i>
+                                            </a>
+                                        {{ else }}
+                                            <i class="fas fa-award me-2 text-muted"></i>{{ .title }}
+                                        {{ end }}
+                                    </h5>
+                                </div>
                             </div>
-                        {{ end }}
-                        <div class="card-body bg-transparent">
-                            <h5 class="card-title bg-transparent">{{ .title }}</h5>
-                            <div class="card-text secondary-font">
-                                {{ .content }}
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                {{ else }}
-                <div class="col-lg-4 col-md-6 my-3">
-                    <div class="card my-3 h-100 p-3" title="{{ .title }}">
-                        {{if .image }}
-                            <div class="card-head">
-                                <img class="card-img-top" src="{{ .image }}">
-                            </div>
-                        {{ end }}
-                        <div class="card-body bg-transparent">
-                            <h5 class="card-title bg-transparent">{{ .title }}</h5>
-                            <div class="card-text secondary-font">
-                                {{ .content }}
+                            <div class="job-content-style mt-2 text-muted">
+                                {{ .description | markdownify }}
                             </div>
                         </div>
-                    </div>
+                    {{ end }}
                 </div>
-                {{ end }}
-                {{ end }}
             </div>
         </div>
     </div>

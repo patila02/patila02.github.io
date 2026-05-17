@@ -1,84 +1,374 @@
 {{ if .Site.Params.projects.enable | default false }}
 {{- $projects := .Site.Language.Params.projects | default .Site.Params.projects -}}
+
+<style>
+    /* Section & Container Styling */
+    .projects-card {
+        background: rgba(128, 128, 128, 0.02) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(128, 128, 128, 0.15) !important;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    }
+    .projects-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+    }
+
+    /* Live Simulator Glass Panel */
+    .sim-panel {
+        background: rgba(128, 128, 128, 0.04);
+        border: 1px solid rgba(128, 128, 128, 0.2);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Interactive Slider Styling */
+    .sim-range {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 6px;
+        border-radius: 5px;
+        background: rgba(128, 128, 128, 0.2);
+        outline: none;
+        transition: background 0.3s;
+    }
+    .sim-range::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #28a745;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(40, 167, 69, 0.4);
+        transition: transform 0.15s ease-in-out;
+    }
+    .sim-range::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+    }
+
+    /* Projection Line Graph Styling */
+    .projection-line {
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 1000;
+        animation: drawLine 2.5s ease-out forwards;
+    }
+    @keyframes drawLine {
+        to { stroke-dashoffset: 0; }
+    }
+
+    /* Badges */
+    .proj-badge {
+        background-color: rgba(128, 128, 128, 0.08) !important;
+        color: inherit !important;
+        font-weight: 500;
+        padding: 0.55em 1em;
+        font-size: 0.85rem;
+        border-radius: 8px;
+        border: 1px solid rgba(128, 128, 128, 0.15);
+        transition: all 0.2s ease;
+    }
+    .proj-badge:hover {
+        background-color: rgba(128, 128, 128, 0.18) !important;
+        border-color: rgba(128, 128, 128, 0.3);
+        transform: translateY(-1px);
+    }
+</style>
+
 <section id="projects" class="py-5">
     <div class="container">
-        <h3 class="text-center">{{ $projects.title | default .Site.Params.projects.title | default (i18n "projects") }}</h3>
-        <div class="row justify-content-center px-3 px-md-5">
-            {{ range $projects.items | default .Site.Params.projects.items }}
-            <div class="col-lg-4 col-md-6 my-3">
-                <div class="card my-3 h-100" title="{{ .title }}">
-                    <div class="card-head">
-                        <img class="card-img-top" src="{{ .image }}" alt="{{ .title }}">
+        <h3 class="text-center mb-5" style="font-weight: 600; letter-spacing: 1px;">{{ $projects.title | default (i18n "projects") }}</h3>
+        
+        <div class="row justify-content-center">
+            <div class="col-sm-12 col-md-11 col-lg-10">
+                
+                <!-- ADVANCED DATA VISUALIZATION: LIVE PORTFOLIO SIMULATOR -->
+                <div class="projects-card p-4 p-md-5 border rounded-4 shadow-sm mb-5">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <span class="badge mb-2" style="background: rgba(40,167,69,0.15); color: #28a745; border: 1px solid rgba(40,167,69,0.3); font-weight: 600;">Interactive Dashboard</span>
+                            <h4 class="mb-3" style="font-weight: 700;">Asset Allocation & Growth Projection Simulator</h4>
+                            <p class="text-muted mb-4" style="font-size: 0.95rem;">
+                                This interactive model demonstrates client portfolio optimizations. Drag the sliders to test how varying risk tolerances alter expected multi-year asset compounding.
+                            </p>
+                            
+                            <div class="sim-panel">
+                                <!-- Slider 1 -->
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span style="font-weight: 600; font-size: 0.9rem;"><i class="fas fa-chart-pie me-2 text-primary"></i>Equities (Stocks)</span>
+                                        <span id="stockVal" style="font-weight: 700;">60%</span>
+                                    </div>
+                                    <input type="range" class="sim-range" id="stockRange" min="0" max="100" value="60">
+                                </div>
+                                
+                                <!-- Slider 2 -->
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span style="font-weight: 600; font-size: 0.9rem;"><i class="fas fa-file-invoice-dollar me-2 text-success"></i>Fixed Income (Bonds)</span>
+                                        <span id="bondVal" style="font-weight: 700;">30%</span>
+                                    </div>
+                                    <input type="range" class="sim-range" id="bondRange" min="0" max="100" value="30">
+                                </div>
+
+                                <!-- Slider 3 -->
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span style="font-weight: 600; font-size: 0.9rem;"><i class="fas fa-coins me-2 text-warning"></i>Alternatives (Crypto/Gold)</span>
+                                        <span id="altVal" style="font-weight: 700;">10%</span>
+                                    </div>
+                                    <input type="range" class="sim-range" id="altRange" min="0" max="100" value="10">
+                                </div>
+
+                                <!-- Live Metrics Output Grid -->
+                                <div class="row g-2 text-center pt-3 border-top" style="border-color: rgba(128,128,128,0.2) !important;">
+                                    <div class="col-4">
+                                        <div class="text-muted small">Est. Return</div>
+                                        <div id="estReturn" class="h5 mb-0 font-weight-bold" style="color: #28a745;">8.85%</div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="text-muted small">Volatility</div>
+                                        <div id="estVol" class="h5 mb-0 font-weight-bold">12.1%</div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="text-muted small">Sharpe Ratio</div>
+                                        <div id="sharpeRatio" class="h5 mb-0 font-weight-bold" style="color: #ffc107;">0.38</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Charts Visualization Column -->
+                        <div class="col-lg-6 d-flex flex-column align-items-center justify-content-center">
+                            <!-- SVG Donut Chart -->
+                            <div class="position-relative d-flex justify-content-center align-items-center" style="width: 180px; height: 180px;">
+                                <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut">
+                                    <circle class="donut-hole" cx="21" cy="21" r="15.91549430918954" fill="transparent"></circle>
+                                    <circle class="donut-ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="rgba(128,128,128,0.1)" stroke-width="4"></circle>
+                                    
+                                    <!-- Stock segment -->
+                                    <circle id="segStock" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#007bff" stroke-width="4.5" stroke-dasharray="60 40" stroke-dashoffset="25"></circle>
+                                    <!-- Bond segment -->
+                                    <circle id="segBond" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#28a745" stroke-width="4.5" stroke-dasharray="30 70" stroke-dashoffset="65"></circle>
+                                    <!-- Alternative segment -->
+                                    <circle id="segAlt" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#ffc107" stroke-width="4.5" stroke-dasharray="10 90" stroke-dashoffset="35"></circle>
+                                </svg>
+                                <div class="position-absolute text-center">
+                                    <span class="small text-muted text-uppercase" style="font-size:0.65rem; letter-spacing:1px;">Simulated</span>
+                                    <div id="initValue" class="h5 mb-0 font-weight-bold">$10,000</div>
+                                </div>
+                            </div>
+
+                            <!-- 10-Year Growth Line Projection (Interactive SVG Path) -->
+                            <div class="w-100 mt-4 px-3">
+                                <div class="d-flex justify-content-between small text-muted mb-1">
+                                    <span>$10,000 Initial</span>
+                                    <span id="projectedTotal" class="font-weight-bold text-success">$23,348 projected</span>
+                                </div>
+                                <svg width="100%" height="80" style="overflow: visible;">
+                                    <!-- Graph Grid Lines -->
+                                    <line x1="0" y1="75" x2="100%" y2="75" stroke="rgba(128,128,128,0.15)" stroke-width="1"></line>
+                                    <line x1="0" y1="40" x2="100%" y2="40" stroke="rgba(128,128,128,0.05)" stroke-width="1" stroke-dasharray="4"></line>
+                                    <line x1="0" y1="5" x2="100%" y2="5" stroke="rgba(128,128,128,0.15)" stroke-width="1"></line>
+                                    
+                                    <!-- Dynamic SVG Graph Line -->
+                                    <path id="graphLine" d="M 0 75 Q 75 60, 150 45 T 300 20" fill="none" stroke="#28a745" stroke-width="3" class="projection-line"></path>
+                                    <circle id="graphPointer" cx="300" cy="20" r="5" fill="#28a745" style="filter: drop-shadow(0 0 4px rgba(40,167,69,0.8));"></circle>
+                                </svg>
+                                <div class="d-flex justify-content-between text-muted" style="font-size: 0.75rem;">
+                                    <span>Year 0</span>
+                                    <span>Year 5</span>
+                                    <span>Year 10</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body bg-transparent p-3">
-                        <div class="pb-2 bg-transparent">
-                            {{ range .badges }}
-                            <span class="badge badge-secondary">{{ . }}</span>
+                </div>
+
+                <!-- STANDARD EXPERIENCE PROJECT LISTING -->
+                <div class="projects-card p-4 p-md-5 border rounded-4 shadow-sm">
+                    {{ range $index, $element := $projects.items }}
+                        <div class="mb-4 {{ if ne (add $index 1) (len $projects.items) }}job-header-divider{{ end }}" style="{{ if ne (add $index 1) (len $projects.items) }}border-bottom: 1px solid rgba(128,128,128,0.2); padding-bottom: 1.5rem; margin-bottom: 1.5rem;{{ end }}">
+                            <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between mb-2">
+                                <div>
+                                    <h5 style="font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0;">{{ .title }}</h5>
+                                </div>
+                                <div class="mt-2 mt-md-0">
+                                    <span class="job-date-badge text-muted">
+                                        <i class="far fa-calendar-alt me-2"></i>{{ .date }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="job-content-style mt-3 text-muted">
+                                {{ .content | markdownify }}
+                            </div>
+                            {{ if .badges }}
+                                <div class="mt-3">
+                                    {{ range .badges }}
+                                        <span class="badge proj-badge">{{ . }}</span>
+                                    {{ end }}
+                                </div>
                             {{ end }}
                         </div>
-                        <h5 class="card-title bg-transparent mt-1">{{ .title }}</h5>
-                        <div class="card-text bg-transparent secondary-font">
-                            {{ .content }}
-                        </div>
-                    </div>
-                    {{ if or (.links) (.featured) }}
-                    <div class="card-footer py-3">
-                        {{ range .links }}
-                        <span class="m-1 mx-2">
-                            <a href="{{ .url }}" target="_blank">
-                                <i class="{{ .icon }}"></i>
-                            </a>
-                        </span>
-                        {{ end }}
-                        {{ if .featured }}
-                        <span class="float-end">
-                            <a class="btn btn-sm" href="{{ .featured.link }}" target="_blank">
-                                {{ .featured.name }}
-                            </a>
-                        </span>
-                        {{ end }}
-                    </div>
                     {{ end }}
                 </div>
+
             </div>
-            {{ end }}
-            {{ range ( where .Site.RegularPages "Type" "projects" ) }}
-            {{ if .Params.showInHome | default true }}
-            <div class="col-lg-4 col-md-6 my-3">
-                <div class="card my-3 h-100" title="{{ .Title }}">
-                    <div class="card-head">
-                        <img class="card-img-top" src="{{ .Params.image }}" alt="{{ .Title }}">
-                    </div>
-                    <div class="card-body bg-transparent p-3">
-                        <div class="pb-2 bg-transparent">
-                            {{ range .Params.badges }}
-                            <span class="badge badge-secondary">{{ . }}</span>
-                            {{ end }}
-                        </div>
-                        <h5 class="card-title bg-transparent">{{ .Title | truncate 50 }}</h5>
-                        <div class="card-text bg-transparent secondary-font">
-                            {{ .Summary | truncate 100 | safeHTML }}
-                        </div>
-                    </div>
-                    <div class="card-footer py-3">
-                        {{ range .Params.links }}
-                        <span class="m-1 mx-2">
-                            <a href="{{ .url }}">
-                                <i class="{{ .icon }}"></i>
-                            </a>
-                        </span>
-                        {{ end }}
-                        <span class="float-end">
-                            <a class="btn btn-sm" href="{{ .RelPermalink }}">
-                                Know more
-                            </a>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            {{ end }}
-            {{ end }}
         </div>
     </div>
 </section>
+
+<!-- SIMULATION CALCULATIONS SCRIPT -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const stockRange = document.getElementById("stockRange");
+        const bondRange = document.getElementById("bondRange");
+        const altRange = document.getElementById("altRange");
+
+        const stockVal = document.getElementById("stockVal");
+        const bondVal = document.getElementById("bondVal");
+        const altVal = document.getElementById("altVal");
+
+        const estReturnText = document.getElementById("estReturn");
+        const estVolText = document.getElementById("estVol");
+        const sharpeRatioText = document.getElementById("sharpeRatio");
+        const projectedTotalText = document.getElementById("projectedTotal");
+
+        const segStock = document.getElementById("segStock");
+        const segBond = document.getElementById("segBond");
+        const segAlt = document.getElementById("segAlt");
+
+        const graphLine = document.getElementById("graphLine");
+        const graphPointer = document.getElementById("graphPointer");
+
+        // Self-balancing helper logic
+        function balanceSliders(activeSource, val1, val2) {
+            let total = parseInt(stockRange.value) + parseInt(bondRange.value) + parseInt(altRange.value);
+            
+            if (total !== 100) {
+                let diff = 100 - total;
+                let share1 = parseInt(val1.value);
+                let share2 = parseInt(val2.value);
+                let sumShares = share1 + share2;
+
+                if (sumShares > 0) {
+                    val1.value = Math.max(0, Math.min(100, Math.round(share1 + (diff * (share1 / sumShares)))));
+                    val2.value = Math.max(0, Math.min(100, Math.round(share2 + (diff * (share2 / sumShares)))));
+                } else {
+                    val1.value = Math.max(0, Math.round(diff / 2));
+                    val2.value = Math.max(0, 100 - parseInt(activeSource.value) - parseInt(val1.value));
+                }
+            }
+            
+            // Double check rounding errors
+            let finalSum = parseInt(stockRange.value) + parseInt(bondRange.value) + parseInt(altRange.value);
+            if (finalSum !== 100) {
+                stockRange.value = 100 - parseInt(bondRange.value) - parseInt(altRange.value);
+            }
+        }
+
+        function runSimulation() {
+            const s = parseInt(stockRange.value);
+            const b = parseInt(bondRange.value);
+            const a = parseInt(altRange.value);
+
+            // Print values inside panel
+            stockVal.textContent = s + "%";
+            bondVal.textContent = b + "%";
+            altVal.textContent = a + "%";
+
+            // Donut chart stroke segments
+            segStock.setAttribute("stroke-dasharray", `${s} ${100 - s}`);
+            segStock.setAttribute("stroke-dashoffset", "25");
+
+            segBond.setAttribute("stroke-dasharray", `${b} ${100 - b}`);
+            segBond.setAttribute("stroke-dashoffset", `${25 - s}`);
+
+            segAlt.setAttribute("stroke-dasharray", `${a} ${100 - a}`);
+            segAlt.setAttribute("stroke-dashoffset", `${25 - s - b}`);
+
+            // FINANCIAL COMPENDIUM FORMULAS (Historical Estimates)
+            const rS = 0.105, vS = 0.16;
+            const rB = 0.048, vB = 0.05;
+            const rA = 0.142, vA = 0.26;
+
+            const wS = s / 100;
+            const wB = b / 100;
+            const wA = a / 100;
+
+            // 1. Expected Return Calculation
+            const expectedReturn = (wS * rS) + (wB * rB) + (wA * rA);
+
+            // 2. Portfolio Volatility Calculation
+            const covSB = 0.001;
+            const covSA = 0.008;
+            const covBA = -0.0005;
+            
+            const variance = 
+                Math.pow(wS * vS, 2) + Math.pow(wB * vB, 2) + Math.pow(wA * vA, 2) +
+                2 * wS * wB * covSB + 2 * wS * wA * covSA + 2 * wB * wA * covBA;
+            const portfolioVol = Math.sqrt(Math.max(0.0001, variance));
+
+            // 3. Sharpe Ratio (Risk-free rate assumed at 4.2%)
+            const rf = 0.042;
+            const sharpe = (expectedReturn - rf) / portfolioVol;
+
+            // Print key parameters
+            estReturnText.textContent = (expectedReturn * 100).toFixed(2) + "%";
+            estVolText.textContent = (portfolioVol * 100).toFixed(1) + "%";
+            sharpeRatioText.textContent = sharpe.toFixed(2);
+
+            if (sharpe > 0.45) {
+                sharpeRatioText.style.color = "#28a745";
+            } else if (sharpe > 0.25) {
+                sharpeRatioText.style.color = "#ffc107";
+            } else {
+                sharpeRatioText.style.color = "#dc3545";
+            }
+
+            // 4. Compounding 10-Year Growth Projection of $10,000
+            const initialWealth = 10000;
+            const projectedWealth = initialWealth * Math.pow(1 + expectedReturn, 10);
+            projectedTotalText.textContent = "$" + Math.round(projectedWealth).toLocaleString() + " projected";
+
+            // Update SVG line points
+            const width = 300;
+            const height = 80;
+            let points = [];
+            
+            for (let i = 0; i <= 10; i++) {
+                let x = (i / 10) * width;
+                let yearWealth = initialWealth * Math.pow(1 + expectedReturn, i);
+                
+                let normY = 75 - ((yearWealth - 10000) / 25000) * 70;
+                normY = Math.max(5, Math.min(75, normY));
+                points.push(`${x},${normY}`);
+            }
+
+            const pathD = `M 0,75 C ${width*0.25},${points[3].split(',')[1]} ${width*0.5},${points[6].split(',')[1]} ${width},${points[10].split(',')[1]}`;
+            graphLine.setAttribute("d", pathD);
+            
+            const lastY = points[10].split(',')[1];
+            graphPointer.setAttribute("cx", width);
+            graphPointer.setAttribute("cy", lastY);
+        }
+
+        stockRange.addEventListener("input", function() {
+            balanceSliders(stockRange, bondRange, altRange);
+            runSimulation();
+        });
+        bondRange.addEventListener("input", function() {
+            balanceSliders(bondRange, stockRange, altRange);
+            runSimulation();
+        });
+        altRange.addEventListener("input", function() {
+            balanceSliders(altRange, stockRange, bondRange);
+            runSimulation();
+        });
+
+        runSimulation();
+    });
+</script>
 {{ end }}

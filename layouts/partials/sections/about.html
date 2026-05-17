@@ -1,27 +1,98 @@
 {{ if .Site.Params.about.enable | default false }}
-{{- $about := .Site.Language.Params.about | default .Site.Params.about -}}
-<section id="about" class="py-0 py-sm-5">
-    <div class="container bg-transparent">
-        <h3 class="text-center bg-transparent">{{ $about.title | default (i18n "about") }}</h3>
-        <div class="bg-transparent row justify-content-center px-3 py-5">
-            {{ if .Site.Params.about.image }}
-            <div class="col-sm-12 col-md-8 col-lg-4 mb-5 mb-sm-0 mb-md-5 mb-lg-0 d-none d-sm-none d-md-block">
-                <div class="image d-flex px-5">
-                    <img src="{{ .Site.Params.about.image }}" class="img-thumbnail mx-auto rounded-circle" alt="{{ .Site.Params.title }} profile picture">
-                </div>
-            </div>
-            {{ end }}
-            <div class="col-sm-12 col-md-12 col-lg-8 content">
-                {{ $about.content | markdownify }}
+<style>
+    /* Styling to match unified premium design language */
+    .about-card {
+        background: rgba(128, 128, 128, 0.02) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(128, 128, 128, 0.15) !important;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    }
+    .about-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+    }
+    
+    /* PERFECT CIRCLE FIX FOR PHOTO */
+    .about-image-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 50% !important; /* Forces a perfect circle */
+        border: 4px solid rgba(128, 128, 128, 0.1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, border-color 0.3s ease;
+        aspect-ratio: 1 / 1; /* Ensures the container never stretches into an oval */
+    }
+    .about-image-container:hover {
+        transform: scale(1.02);
+        border-color: rgba(128, 128, 128, 0.25);
+    }
+    .about-img {
+        transition: transform 0.5s ease;
+        object-fit: cover; /* Centers and crops the image perfectly */
+        width: 100%;
+        height: 100%;
+    }
+    .about-image-container:hover .about-img {
+        transform: scale(1.06);
+    }
 
-                {{ if .Site.Params.about.skills.enable }}
-                {{ $about.skills.title | default .Site.Params.about.skills.title }}
-                <ul>
-                    {{ range .Site.Params.about.skills.items }}
-                    <li>{{ . | markdownify }}</li>
+    /* Skills Badges with Soft Colors and Borders */
+    .skill-badge {
+        background-color: rgba(128, 128, 128, 0.08) !important;
+        color: inherit !important;
+        font-weight: 500;
+        padding: 0.55em 1em;
+        font-size: 0.85rem;
+        border-radius: 8px;
+        border: 1px solid rgba(128, 128, 128, 0.15);
+        transition: all 0.2s ease;
+    }
+    .skill-badge:hover {
+        background-color: rgba(128, 128, 128, 0.18) !important;
+        border-color: rgba(128, 128, 128, 0.3);
+        transform: translateY(-1px);
+    }
+</style>
+
+<section id="about" class="py-5">
+    <div class="container">
+        <h3 class="text-center mb-5" style="font-weight: 600; letter-spacing: 1px;">{{ .Site.Params.about.title | default "About Me" }}</h3>
+        <div class="row justify-content-center">
+            <div class="col-sm-12 col-md-11 col-lg-10">
+                <div class="about-card p-4 p-md-5 border rounded-4 shadow-sm d-flex flex-column flex-md-row align-items-center">
+                    
+                    <!-- Left Column: Upgraded Visual Photo Frame -->
+                    {{ if .Site.Params.about.image }}
+                    <div class="mb-4 mb-md-0 me-md-5 flex-shrink-0 text-center">
+                        <div class="about-image-container" style="width: 230px; height: 230px; margin: 0 auto;">
+                            <img src="{{ .Site.Params.about.image }}" alt="About Me" class="about-img">
+                        </div>
+                    </div>
                     {{ end }}
-                </ul>
-                {{ end }}
+                    
+                    <!-- Right Column: Biography & Tech Badges -->
+                    <div class="flex-grow-1">
+                        <div class="job-content-style text-muted mb-4" style="font-size: 1.05rem; line-height: 1.7;">
+                            {{ .Site.Params.about.content | markdownify }}
+                        </div>
+                        
+                        <!-- Skills Section with Outlined Badges -->
+                        {{ if .Site.Params.about.skills.enable }}
+                        <div class="mt-4 pt-4 border-top" style="border-color: rgba(128,128,128,0.15) !important;">
+                            <h6 style="font-weight: 600; letter-spacing: 0.5px;" class="mb-3 text-muted">{{ .Site.Params.about.skills.title }}</h6>
+                            <ul class="list-unstyled d-flex flex-wrap gap-2 mb-0">
+                                {{ range .Site.Params.about.skills.items }}
+                                    <li class="skill-badge">
+                                        {{ . }}
+                                    </li>
+                                {{ end }}
+                            </ul>
+                        </div>
+                        {{ end }}
+                        
+                    </div>
+                </div>
             </div>
         </div>
     </div>

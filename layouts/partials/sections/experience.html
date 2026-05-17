@@ -1,18 +1,61 @@
 {{ if .Site.Params.experience.enable | default false }}
 {{- $experience := .Site.Language.Params.experience | default .Site.Params.experience -}}
+
+<style>
+    .experience-card {
+        transition: all 0.3s ease;
+        background-color: rgba(128, 128, 128, 0.02);
+    }
+    .experience-card:hover {
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
+    }
+    .nav-pills .nav-link {
+        border-radius: 50px;
+        padding: 0.5rem 1.5rem;
+        margin: 0 0.25rem;
+        transition: all 0.2s ease;
+        font-weight: 500;
+        opacity: 0.7;
+    }
+    .nav-pills .nav-link.active, .nav-pills .nav-link:hover {
+        opacity: 1;
+        background-color: rgba(128,128,128,0.1) !important;
+    }
+    .job-header-divider {
+        border-bottom: 1px solid rgba(128,128,128,0.2);
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .job-date-badge {
+        font-size: 0.85rem;
+        padding: 0.4em 0.8em;
+        background: rgba(128,128,128,0.1);
+        border-radius: 6px;
+        font-weight: 500;
+    }
+    .job-content-style ul {
+        padding-left: 1.2rem;
+    }
+    .job-content-style li {
+        margin-bottom: 0.75rem;
+        line-height: 1.6;
+    }
+</style>
+
 <section id="experience" class="py-5">
     <div class="container">
-        <h3 class="text-center">{{ $experience.title | default .Site.Params.experience.title | default (i18n "experience") }}</h3>
+        <h3 class="text-center mb-5" style="font-weight: 600; letter-spacing: 1px;">{{ $experience.title | default .Site.Params.experience.title | default (i18n "experience") }}</h3>
         <div class="row justify-content-center">
-            <div class="col-sm-12 col-md-8 col-lg-8 py-5">
-                <div class="experience-container px-3 pt-2">
-                    <ul class="nav nav-pills mb-2 bg-transparent primary-font" id="pills-tab" role="tablist">
+            <div class="col-sm-12 col-md-10 col-lg-9">
+                <div class="experience-container experience-card p-4 p-md-5 border rounded shadow-sm">
+                    
+                    <ul class="nav nav-pills mb-4 pb-2 bg-transparent primary-font justify-content-center" id="pills-tab" role="tablist">
                         {{ range $index, $element := $experience.items | default .Site.Params.experience.items }}
                             {{ $firstJobDate := "" }}
                             {{ if .jobs }}
                                 {{ $firstJobDate = (index .jobs 0).date }}
                             {{ end }}
-                            <li class="nav-item px-1 bg-transparent" role="presentation">
+                            <li class="nav-item bg-transparent" role="presentation">
                                 <div
                                     class="nav-link {{ if (eq $index 0) }}active{{ end }} bg-transparent"
                                     aria-selected="true"
@@ -21,6 +64,7 @@
                                     id='{{ replaceRE "-+" "-" (replaceRE "[^a-zA-Z0-9]" "-" (print .company "-" $firstJobDate)) | lower }}-tab'
                                     data-bs-target='#pills-{{ replaceRE "-+" "-" (replaceRE "[^a-zA-Z0-9]" "-" (print .company "-" $firstJobDate)) | lower }}'
                                     aria-controls='{{ replaceRE "-+" "-" (replaceRE "[^a-zA-Z0-9]" "-" (print .company "-" $firstJobDate)) | lower }}'
+                                    style="cursor: pointer;"
                                 >
                                     {{ .company }}
                                 </div>
@@ -28,7 +72,7 @@
                         {{ end }}
                     </ul>
 
-                    <div class="tab-content pb-3 bg-transparent primary-font" id="pills-tabContent">
+                    <div class="tab-content bg-transparent primary-font" id="pills-tabContent">
                         {{ range $index, $element := $experience.items | default .Site.Params.experience.items }}
                             {{ $company := .company }}
                             {{ $companyUrl := .companyUrl }}
@@ -43,77 +87,29 @@
                                 aria-labelledby='{{ replaceRE "-+" "-" (replaceRE "[^a-zA-Z0-9]" "-" (print .company "-" $firstJobDate)) | lower }}-tab'
                             >
                                 {{ range $jobIdx, $job := .jobs }}
-                                    <div>
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div>
-                                                <span class="{{ if eq $jobIdx 0 }}h4{{ else }}h5{{ end }}">{{ $job.name }}</span>
-                                                
-                                                {{ if $job.info.content }}
-                                                    <span class="p-2">
-                                                        <span
-                                                            data-bs-toggle="tooltip"
-                                                            data-bs-placement="top"
-                                                            data-bs-original-title={{$job.info.content}}
-                                                        > 
-                                                            <i class="fas fa-info-circle fa-xs"></i>
-                                                        </span>
-                                                    </span>
-                                                {{ end }}
-                                                
-                                                {{ if eq $jobIdx 0 }}
-                                                    <small>-</small>
-                                                    <a href="{{ $companyUrl }}" target="_blank">{{ $company }}</a>
-                                                {{ end }}
+                                    <div class="mb-4">
+                                        <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between job-header-divider">
+                                            <div class="mb-2 mb-md-0">
+                                                <span class="{{ if eq $jobIdx 0 }}h4{{ else }}h5{{ end }} mb-0" style="font-weight: 600; letter-spacing: 0.5px;">
+                                                    {{ $job.name | default $job.designation | default $job.title | default $job.role | safeHTML }}
+                                                </span>
                                             </div>
-                                            <div class="d-block">
-                                                <small>{{ $job.date }}</small>
-                                                {{ if $job.featuredItems }}
-                                                    <div class="featuredLink list-inline d-flex justify-content-end align-items-center">
-                                                        {{ range $job.featuredItems.fontAwesomeIcons }}
-                                                            <div class="list-inline-item">
-                                                                <a
-                                                                    href="{{ .url }}"
-                                                                    target="_blank"
-                                                                    {{ if .tooltip}}
-                                                                        data-bs-toggle="tooltip" 
-                                                                        data-bs-placement="top" 
-                                                                        data-bs-original-title={{.tooltip}}
-                                                                    {{ end }}
-                                                                >
-                                                                    <i class="{{ .icon }}"></i>
-                                                                </a>
-                                                            </div>
-                                                        {{ end }}
-                                                        {{ range $job.featuredItems.customIcons }}
-                                                            <div class="list-inline-item">
-                                                                <a
-                                                                    class="d-flex align-items-center justify-content-between" 
-                                                                    href="{{ .url }}" 
-                                                                    target="_blank"
-
-                                                                    {{ if .tooltip}}
-                                                                        data-bs-toggle="tooltip" 
-                                                                        data-bs-placement="top" 
-                                                                        data-bs-original-title={{.tooltip}}
-                                                                    {{ end }}
-                                                                >
-                                                                    <img src="{{ .icon }}">
-                                                                </a>
-                                                            </div>
-                                                        {{ end }}
-                                                    </div>
-                                                {{ end }}
+                                            
+                                            <div class="d-flex align-items-center">
+                                                <span class="job-date-badge text-muted">
+                                                    <i class="far fa-calendar-alt me-2"></i>{{ $job.date }}
+                                                </span>
                                             </div>
                                         </div>
-                                        <div class="pb-2 pb-3">
+                                        <div class="job-content-style">
                                             {{ $job.content | markdownify}}
                                         </div>
                                     </div>
                                 {{ end }}
                             </div>
-                        
                         {{ end }}
                     </div>
+                    
                 </div>
             </div>
         </div>
